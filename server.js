@@ -8,7 +8,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_glassmorphism_token_key_123!';
-const DB_PATH = path.join(__dirname, 'data', 'db.json');
+// Use Render persistent disk at /data in production, local data/ folder in development
+const DB_PATH = process.env.NODE_ENV === 'production'
+  ? '/data/db.json'
+  : path.join(__dirname, 'data', 'db.json');
+
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
