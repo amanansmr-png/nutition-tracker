@@ -8,10 +8,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_glassmorphism_token_key_123!';
-// Use Render persistent disk at /data in production, local data/ folder in development
-const DB_PATH = process.env.NODE_ENV === 'production'
-  ? '/data/db.json'
-  : path.join(__dirname, 'data', 'db.json');
+const DB_PATH = path.join(__dirname, 'data', 'db.json');
 
 
 app.use(cors());
@@ -30,7 +27,7 @@ app.get('/:page.html', (req, res) => {
 
 // ---------- Database Helpers ----------
 async function initDb() {
-  const dir = path.join(__dirname, 'data');
+  const dir = path.dirname(DB_PATH);
   try {
     await fs.mkdir(dir, { recursive: true });
   } catch (err) {}
