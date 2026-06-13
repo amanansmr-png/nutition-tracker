@@ -14,16 +14,12 @@ const DB_PATH = path.join(__dirname, 'data', 'db.json');
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Serve Static Frontend files
-app.use('/css', express.static(path.join(__dirname, 'css')));
-app.use('/js', express.static(path.join(__dirname, 'js')));
+// Serve all static files (CSS, JS, HTML) from project root
+app.use(express.static(path.join(__dirname), {
+  index: 'index.html',
+  dotfiles: 'ignore'
+}));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-app.get('/:page.html', (req, res) => {
-  res.sendFile(path.join(__dirname, `${req.params.page}.html`));
-});
 
 // ---------- Database Helpers ----------
 async function initDb() {
