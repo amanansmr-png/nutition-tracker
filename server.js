@@ -569,7 +569,7 @@ app.post('/api/zoro/chat/clear', authenticateToken, async (req, res) => {
 });
 
 // ---------- Start Server ----------
-app.listen(PORT, async () => {
+app.listen(PORT, '0.0.0.0', async () => {
   await initDb();
-  console.log(`Nutri backend running on http://localhost:${PORT}`);
+  console.log(`Nutri backend running on http://0.0.0.0:${PORT}`);
 });
