@@ -53,6 +53,15 @@ async function readDb() {
   try {
     const raw = await fs.readFile(DB_PATH, 'utf8');
     const parsed = JSON.parse(raw);
+    // Ensure all keys always exist (defensive coding)
+    parsed.users = parsed.users || [];
+    parsed.goals = parsed.goals || {};
+    parsed.profiles = parsed.profiles || {};
+    parsed.foodLogs = parsed.foodLogs || {};
+    parsed.waterLogs = parsed.waterLogs || {};
+    parsed.burnedLogs = parsed.burnedLogs || {};
+    parsed.weightLogs = parsed.weightLogs || {};
+    parsed.orders = parsed.orders || {};
     parsed.zoroChatHistory = parsed.zoroChatHistory || {};
     parsed.zoroMemory = parsed.zoroMemory || {};
     return parsed;
