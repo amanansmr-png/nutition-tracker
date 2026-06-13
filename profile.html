@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Manage your profile, personal details, language preferences, and track step goals.">
+  <title>Nutri Tracker — Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .languages-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    
+    .lang-chip {
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-glass);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .lang-chip:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+    }
+    
+    .lang-chip.active {
+      color: var(--text-primary);
+      background: rgba(168, 85, 247, 0.18);
+      border-color: rgba(168, 85, 247, 0.35);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+    
+    /* Weight progression bar styles */
+    .delta-bar-container {
+      width: 100%;
+      height: 48px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    
+    .delta-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+      opacity: 0.15;
+      transition: width 0.8s ease;
+    }
+    
+    .step-gauge-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+    }
+    
+    .step-gauge svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    
+    .step-gauge-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.06);
+      stroke-width: 10;
+    }
+    
+    .step-gauge-fill {
+      fill: none;
+      stroke: url(#stepGrad);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.8s ease;
+    }
+    
+    .step-gauge-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .step-gauge-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Your Profile</h1>
+        <p>Manage personal metrics, language preferences, and tracking objectives</p>
+      </div>
+
+      <div class="grid-2" style="align-items: start;">
+        <!-- Left Side: Profile Editing Forms -->
+        <div class="flex-col gap-24">
+          <!-- General Info Card -->
+          <div class="glass-card flex-col gap-24">
+            <div class="section-header">
+              <h2>General Info</h2>
+              <p>Basic account parameters</p>
+            </div>
+            
+            <div class="input-group">
+              <label for="profileName">Full Name</label>
+              <input type="text" id="profileName" class="input-field" placeholder="John Doe">
+            </div>
+            
+            <div class="input-group">
+              <label for="profileAge">Age (years)</label>
+              <input type="number" id="profileAge" class="input-field" placeholder="25" min="1">
+            </div>
+          </div>
+
+          <!-- Personal Details Card -->
+          <div class="glass-card flex-col gap-24">
+            <div class="section-header">
+              <h2>Personal Details</h2>
+              <p>Key bio-metrics to calibrate tracking calculations</p>
+            </div>
+            
+            <div class="grid-2" style="gap: 16px;">
+              <div class="input-group">
+                <label for="profileWeight">Current Weight (kg)</label>
+                <input type="number" id="profileWeight" class="input-field" placeholder="70" step="0.1" min="1">
+              </div>
+              <div class="input-group">
+                <label for="profileGoalWeight">Goal Weight (kg)</label>
+                <input type="number" id="profileGoalWeight" class="input-field" placeholder="68" step="0.1" min="1">
+              </div>
+              <div class="input-group">
+                <label for="profileHeight">Height (cm)</label>
+                <input type="number" id="profileHeight" class="input-field" placeholder="175" min="1">
+              </div>
+              <div class="input-group">
+                <label for="profileDob">Date of Birth</label>
+                <input type="date" id="profileDob" class="input-field">
+              </div>
+              <div class="input-group">
+                <label for="profileGender">Gender</label>
+                <select id="profileGender" class="input-field">
+                  <option value="unspecified">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="profileStepGoal">Daily Step Goal</label>
+                <input type="number" id="profileStepGoal" class="input-field" placeholder="10000" min="1000">
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages Card -->
+          <div class="glass-card flex-col gap-12">
+            <div class="section-header">
+              <h2>Languages</h2>
+              <p>Select languages you communicate in</p>
+            </div>
+            <div class="languages-grid" id="languagesGrid">
+              <!-- Dynamically populated chips -->
+            </div>
+          </div>
+          
+          <button id="saveProfileBtn" class="btn btn-primary btn-block" onclick="saveUserProfile()">💾 Save Profile Information</button>
+        </div>
+
+        <!-- Right Side: Tracking & Detailed Diagrams -->
+        <div class="flex-col gap-24">
+          <!-- Step Goal Diagram Card -->
+          <div class="glass-card flex-col gap-24 text-center">
+            <div class="section-header text-left">
+              <h2>Step Tracker</h2>
+              <p>Daily step counts vs objective</p>
+            </div>
+            
+            <div class="step-gauge-container">
+              <div class="step-gauge">
+                <svg viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="stepGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--accent-cyan)" />
+                      <stop offset="100%" stop-color="var(--accent-indigo)" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="step-gauge-bg" cx="100" cy="100" r="80"/>
+                  <circle id="stepGaugeFill" class="step-gauge-fill" cx="100" cy="100" r="80" stroke-dasharray="502.6" stroke-dashoffset="502.6"/>
+                </svg>
+                <div class="step-gauge-text">
+                  <div class="step-gauge-number" id="stepGaugeValue">0</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">steps today</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Step logger slider (to test/verify working) -->
+            <div class="flex-col gap-12" style="border-top: 1px solid var(--border-glass); padding-top: 20px;">
+              <div class="flex justify-between items-center" style="font-size:0.85rem;">
+                <span class="text-secondary">Logged Steps today:</span>
+                <span class="text-cyan font-bold" id="loggedStepsLabel" style="font-weight:700;">5,000 steps</span>
+              </div>
+              <input type="range" id="stepsInputSlider" min="0" max="25000" step="500" value="5000" style="width:100%; background:var(--bg-input); height:6px; border-radius:3px; outline:none; cursor:pointer;" oninput="updateLoggedSteps(this.value)">
+            </div>
+          </div>
+
+          <!-- Weight Target Progression Card -->
+          <div class="glass-card flex-col gap-24">
+            <div class="section-header">
+              <h2>Weight Target Progression</h2>
+              <p>Distance left to achieve weight goal</p>
+            </div>
+            
+            <div class="flex-col gap-12">
+              <div class="delta-bar-container">
+                <div class="delta-bar-fill" id="weightDeltaFill" style="width: 0%;"></div>
+                <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);" id="startWeightLabel">Current: -- kg</div>
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);" id="deltaWeightLabel">--</div>
+                <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);" id="targetWeightLabel">Goal: -- kg</div>
+              </div>
+              <p style="font-size:0.8rem; color:var(--text-muted); line-height: 1.4;" id="weightInstructionText">
+                Please enter both current weight and target weight to plot the progression delta.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

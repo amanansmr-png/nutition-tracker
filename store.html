@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Shop premium protein powder, bars, and supplements at the Nutri Store.">
+  <title>Nutri Tracker — Nutri Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+    
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all var(--transition-base);
+    }
+    
+    .product-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glass-strong);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .product-image-container {
+      height: 200px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(6, 182, 212, 0.08));
+      border-bottom: 1px solid var(--border-glass);
+    }
+    
+    .product-image-container img {
+      max-height: 80%;
+      max-width: 80%;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+      transition: transform var(--transition-base);
+    }
+    
+    .product-card:hover .product-image-container img {
+      transform: scale(1.08) rotate(2deg);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+    
+    .product-details {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 8px;
+    }
+    
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      flex: 1;
+    }
+    
+    .product-meta-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    
+    .product-tag {
+      background: rgba(255,255,255,0.04);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      border-top: 1px solid var(--border-glass);
+      padding-top: 12px;
+    }
+    
+    .product-price {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    /* Cart Sidebar Styles */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: rgba(15, 10, 30, 0.95);
+      backdrop-filter: blur(var(--blur-heavy));
+      -webkit-backdrop-filter: blur(var(--blur-heavy));
+      border-left: 1px solid var(--border-glass-strong);
+      z-index: 600;
+      display: flex;
+      flex-direction: column;
+      transition: right var(--transition-base);
+    }
+    
+    .cart-drawer.open {
+      right: 0;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .cart-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .cart-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    
+    .close-cart-btn {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    
+    .cart-items-list {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-glass);
+      padding: 12px;
+      border-radius: var(--radius-md);
+    }
+    
+    .cart-item-image {
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .cart-item-image img {
+      max-height: 80%;
+      max-width: 80%;
+    }
+    
+    .cart-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .cart-item-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .cart-item-price {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .cart-qty-btn {
+      width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-glass);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+    }
+    
+    .cart-qty-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .cart-qty-val {
+      font-size: 0.85rem;
+      font-weight: 600;
+      width: 16px;
+      text-align: center;
+    }
+    
+    .cart-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border-glass);
+      background: rgba(10, 5, 25, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    
+    .cart-summary-total {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    /* Floating Cart Button */
+    .floating-cart-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-full);
+      background: var(--gradient-primary);
+      box-shadow: var(--shadow-glow-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: white;
+      cursor: pointer;
+      z-index: 550;
+      transition: all var(--transition-fast);
+    }
+    
+    .floating-cart-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+    }
+    
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--accent-red);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      min-width: 20px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid rgba(15, 10, 30, 0.95);
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-content">
+      <div class="page-header flex justify-between items-center" style="margin-bottom: 24px;">
+        <div>
+          <h1>Nutri Store</h1>
+          <p>Get premium protein and nutritional supplies delivered to your door</p>
+        </div>
+        <button class="btn btn-secondary" onclick="toggleCart(true)">
+          🛒 View Cart (<span id="cartCountLabel">0</span>)
+        </button>
+      </div>
+
+      <!-- Main Layout: Catalog and Past Orders -->
+      <div class="flex-col gap-24">
+        <!-- Catalog section -->
+        <div class="glass-card flex-col gap-12">
+          <div class="section-header">
+            <h2>Product Catalog</h2>
+            <p>Formulated for high performance, recovery, and macro density</p>
+          </div>
+          
+          <div id="productGrid" class="store-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Order History Card -->
+        <div class="glass-card flex-col gap-16">
+          <div class="section-header">
+            <h2>Your Order Receipts</h2>
+            <p>View your past checkout history and delivery status</p>
+          </div>
+          <div id="ordersList" class="scroll-list" style="max-height: 300px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Cart Sidebar Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h2>Shopping Cart</h2>
+      <span class="close-cart-btn" onclick="toggleCart(false)">✕</span>
+    </div>
+    
+    <div class="cart-items-list" id="cartItemsList">
+      <!-- Dynamically populated -->
+    </div>
+    
+    <div class="cart-footer">
+      <div class="input-group">
+        <label for="shippingAddress">Delivery Address</label>
+        <input type="text" id="shippingAddress" class="input-field" placeholder="123 Health Ave, Fitness City" value="123 Health Ave, Fitness City">
+      </div>
+      
+      <div class="cart-summary-row">
+        <span>Subtotal:</span>
+        <span class="cart-summary-total" id="cartTotalVal">$0.00</span>
+      </div>
+      
+      <button class="btn btn-primary btn-block" onclick="checkoutCart()">Place Order</button>
+    </div>
+  </div>
+  
+  <div class="sidebar-overlay" id="cartOverlay" onclick="toggleCart(false)" style="z-index: 590;"></div>
+
+  <!-- Floating Cart Button -->
+  <div class="floating-cart-btn" onclick="toggleCart(true)">
+    🛒
+    <div class="cart-badge" id="floatingCartBadge" style="display:none;">0</div>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/store.js"></script>
+</body>
+</html>

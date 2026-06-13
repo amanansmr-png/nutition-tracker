@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Snap or upload a photo of your food for instant AI calorie and macro estimations.">
+  <title>Nutri Tracker — AI Food Scanner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-content">
+      <div class="page-header flex justify-between items-center">
+        <div>
+          <h1>AI Food Scanner</h1>
+          <p>Instant nutrition estimates using your camera</p>
+        </div>
+        <div id="apiKeyStatus" style="font-size: 0.85rem;">
+          <!-- Dynamically populated key status -->
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-24">
+        <!-- Scanner Area -->
+        <div id="scannerViewport" class="scanner-viewport">
+          <video id="cameraVideo" autoplay playsinline style="display:none;"></video>
+          <div id="cameraPlaceholder" class="flex flex-col items-center justify-center text-center" style="width: 100%; height: 100%; padding: 40px; color: var(--text-secondary);">
+            <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.6;">📷</div>
+            <p style="font-size: 1rem; font-weight: 500;">Camera is inactive</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; max-width: 280px;">Start the camera to scan your food, or upload a photo from your device.</p>
+          </div>
+          <div class="scanner-overlay">
+            <div class="scanner-corners">
+              <span></span>
+            </div>
+            <div class="scanner-line"></div>
+          </div>
+        </div>
+
+        <!-- Camera Controls -->
+        <div id="cameraControls" class="scanner-controls">
+          <button id="startCameraBtn" class="btn btn-primary" onclick="startCamera()">📷 Start Camera</button>
+          <button id="captureBtn" class="scanner-btn scanner-btn-capture" onclick="capturePhoto()" style="display:none;" title="Capture Photo">📸</button>
+          <button id="stopCameraBtn" class="scanner-btn scanner-btn-secondary" onclick="stopCamera()" style="display:none;" title="Turn Off Camera">✕</button>
+
+          <input type="file" id="fileUpload" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
+          <button class="btn btn-secondary" onclick="document.getElementById('fileUpload').click()">📤 Upload Photo</button>
+        </div>
+
+        <!-- Captured Image Preview -->
+        <div id="capturedPreview" class="glass-card flex flex-col items-center text-center" style="display:none; max-width: 480px; margin: 0 auto; gap: 20px;">
+          <div class="scanner-viewport" style="aspect-ratio: 3/4; width: 100%;">
+            <img id="previewImage" src="" alt="Captured food photo">
+          </div>
+          <div class="flex gap-12 w-full justify-center">
+            <button class="btn btn-secondary" onclick="retakePhoto()">🔄 Retake</button>
+            <button id="analyzeBtn" class="btn btn-primary" onclick="analyzeFood()">🔬 Analyze Food</button>
+          </div>
+        </div>
+
+        <!-- Analysis Loader -->
+        <div id="analysisLoading" class="glass-card flex flex-col items-center justify-center text-center" style="display:none; max-width: 480px; margin: 0 auto; padding: 40px; gap: 16px;">
+          <div class="spinner"></div>
+          <p style="font-weight: 500;">AI is analyzing your food...</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Estimating ingredients, portions, calories, and macros.</p>
+        </div>
+
+        <!-- Scanned Nutrition Results -->
+        <div id="analysisResult" class="glass-card flex flex-col gap-24" style="display:none; max-width: 480px; margin: 0 auto;">
+          <div class="section-header">
+            <h2 id="resultFoodName">Unknown Food</h2>
+            <p id="resultServing">1 serving</p>
+          </div>
+
+          <!-- Health Score Gauge -->
+          <div class="flex items-center justify-center gap-24" style="border-bottom: 1px solid var(--border-glass); padding-bottom: 20px;">
+            <div class="health-score-circle" id="healthScoreCircle" style="border: 4px solid var(--border-glass-strong);">
+              <span id="healthScoreValue">-</span>
+            </div>
+            <div class="flex flex-col">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Health Score</div>
+              <div class="health-score-label" style="font-size: 1.1rem; font-weight: 700;" id="healthScoreLabel">Moderate</div>
+            </div>
+          </div>
+
+          <!-- Nutrition Grid -->
+          <div class="nutrition-result" id="nutritionGrid">
+            <!-- Dynamically populated items -->
+          </div>
+
+          <!-- Log Actions -->
+          <div class="flex flex-col gap-12" style="border-top: 1px solid var(--border-glass); padding-top: 20px;">
+            <h3 style="font-size: 0.95rem; font-weight: 600; text-align: center;">Log this food to:</h3>
+            <div class="meal-type-selector">
+              <button class="meal-type-option" data-meal="breakfast" onclick="addScannedFood('breakfast')">
+                <span class="meal-emoji">🌅</span> Breakfast
+              </button>
+              <button class="meal-type-option" data-meal="lunch" onclick="addScannedFood('lunch')">
+                <span class="meal-emoji">☀️</span> Lunch
+              </button>
+              <button class="meal-type-option" data-meal="dinner" onclick="addScannedFood('dinner')">
+                <span class="meal-emoji">🌙</span> Dinner
+              </button>
+              <button class="meal-type-option" data-meal="snack" onclick="addScannedFood('snack')">
+                <span class="meal-emoji">🍿</span> Snack
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Settings API Configuration Modal -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>API Configuration</h3>
+        <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="settings-section">
+        <div class="input-group">
+          <label for="geminiKeyInput">Gemini API Key</label>
+          <input type="password" id="geminiKeyInput" class="input-field" placeholder="AIzaSy...">
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: -8px;">
+          Your key is saved locally in your browser and used to connect directly to the Google Gemini API.
+        </p>
+        <div class="flex justify-between gap-12 mt-8">
+          <button class="btn btn-secondary btn-block" onclick="closeSettingsModal()">Cancel</button>
+          <button class="btn btn-primary btn-block" onclick="saveApiKey()">Save Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/scan.js"></script>
+</body>
+</html>

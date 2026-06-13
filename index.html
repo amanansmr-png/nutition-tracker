@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Log in or create an account to start tracking calories, macros, and water.">
+  <title>Nutri Tracker — Sign In</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <h1>Nutri</h1>
+        <p>Your AI-Powered Nutrition Companion</p>
+      </div>
+
+      <div class="auth-tabs">
+        <div id="loginTab" class="auth-tab active">Sign In</div>
+        <div id="signupTab" class="auth-tab">Register</div>
+      </div>
+
+      <div id="authError" class="auth-error"></div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="input-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="input-field" placeholder="name@example.com" required>
+        </div>
+        <div class="input-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="input-field" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" class="auth-form" style="display: none;">
+        <div class="input-group">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" class="input-field" placeholder="John Doe" required>
+        </div>
+        <div class="input-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" class="input-field" placeholder="name@example.com" required>
+        </div>
+        <div class="input-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" class="input-field" placeholder="At least 6 characters" required>
+        </div>
+        <div class="input-group">
+          <label for="signupConfirm">Confirm Password</label>
+          <input type="password" id="signupConfirm" class="input-field" placeholder="Re-enter password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+
+      <div class="auth-divider">or</div>
+
+      <!-- Google Button -->
+      <button id="googleBtn" class="google-btn">
+        <svg viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.47 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.79 2.94C6.07 7.22 8.79 5.04 12 5.04z"/>
+          <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.4 3.58l3.74 2.9c2.19-2.02 3.69-5 3.69-8.63z"/>
+          <path fill="#FBBC05" d="M5.18 14.5c-.25-.75-.39-1.56-.39-2.4s.14-1.65.39-2.4L1.39 6.76C.5 8.54 0 10.51 0 12.6s.5 4.06 1.39 5.84l3.79-2.94z"/>
+          <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.74-2.9c-1.12.75-2.54 1.21-4.22 1.21-3.21 0-5.93-2.18-6.9-5.12L1.3 16.22C3.28 20.11 7.26 23 12 23z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

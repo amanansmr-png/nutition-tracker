@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker – Progress dashboard with streaks, weight trend, calorie balance, and BMI gauge.">
+  <title>Nutri Tracker — Progress</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Additional page‑specific glass styling */
+    .progress-section { margin-bottom: 32px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Navigation is rendered by app.js -->
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Progress</h1>
+        <p>Track your streaks, weight journey, calorie balance and BMI.</p>
+      </div>
+
+      <!-- Streak & Badges Card -->
+      <section class="progress-section" id="streak-badges">
+        <div class="glass-card">
+          <div class="section-header">
+            <h2>Streak & Badges</h2>
+            <p>Current day streak and earned badges.</p>
+          </div>
+          <div id="streakCard" class="card-content"></div>
+        </div>
+      </section>
+
+      <!-- Weight Progress Chart Card -->
+      <section class="progress-section" id="weight-progress">
+        <div class="glass-card">
+          <div class="section-header">
+            <h2>Weight Progress</h2>
+            <p>Line chart of weight over time.</p>
+          </div>
+          <div class="card-grid">
+            <div id="weightChart" class="card-content"></div>
+            <div id="weightControls" class="card-content">
+              <button class="btn btn-secondary" data-range="90">90D</button>
+              <button class="btn btn-secondary" data-range="180">6M</button>
+              <button class="btn btn-secondary" data-range="365">1Y</button>
+              <button class="btn btn-secondary" data-range="all">ALL</button>
+              <div id="goalProgress" class="progress-bar-track" style="margin-top:12px;">
+                <div class="progress-bar-fill" style="width:0%; background:var(--accent-green);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calorie & Burned Progress Card -->
+      <section class="progress-section" id="calorie-progress">
+        <div class="glass-card">
+          <div class="section-header">
+            <h2>Calorie vs Burned</h2>
+            <p>Side‑by‑side bar chart with weekly filters.</p>
+          </div>
+          <div class="card-grid">
+            <div id="calorieChart" class="card-content"></div>
+            <div id="calorieControls" class="card-content">
+              <button class="btn btn-secondary" data-week="0">This wk</button>
+              <button class="btn btn-secondary" data-week="1">Last wk</button>
+              <button class="btn btn-secondary" data-week="2">2 wk ago</button>
+              <button class="btn btn-secondary" data-week="3">3 wk ago</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Expenditure Changes Section -->
+      <section class="progress-section" id="expenditure-changes">
+        <div class="glass-card">
+          <div class="section-header">
+            <h2>Expenditure Changes</h2>
+            <p>Deficit / surplus trends for various periods.</p>
+          </div>
+          <div id="expenditureList" class="card-content"></div>
+        </div>
+      </section>
+
+      <!-- BMI Horizontal Gauge -->
+      <section class="progress-section" id="bmi-gauge">
+        <div class="glass-card">
+          <div class="section-header">
+            <h2>BMI Gauge</h2>
+            <p>Current BMI with health status badge.</p>
+          </div>
+          <div id="bmiGauge" class="card-content" style="position:relative; height:60px;">
+            <svg width="100%" height="100%" viewBox="0 0 300 40" style="overflow:visible;">
+              <!-- Colored range bar -->
+              <defs>
+                <linearGradient id="bmiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--accent-blue)"/>
+                  <stop offset="33%" stop-color="var(--accent-green)"/>
+                  <stop offset="66%" stop-color="var(--accent-yellow)"/>
+                  <stop offset="100%" stop-color="var(--accent-red)"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="10" width="300" height="20" fill="url(#bmiGradient)" rx="10"/>
+              <!-- Pointer (will be moved via JS) -->
+              <polygon id="bmiPointer" points="0,0 10,20 0,40" fill="var(--text-primary)" transform="translate(0,0)"/>
+            </svg>
+            <div id="bmiValue" style="position:absolute; top:0; left:50%; transform:translateX(-50%); font-weight:600; color:var(--text-primary);"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/progress.js" type="module"></script>
+</body>
+</html>

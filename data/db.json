@@ -1,0 +1,150 @@
+{
+  "users": [
+    {
+      "id": "u_1781192485123el1ir",
+      "email": "amanans2006@gmail.com",
+      "password": "123aman",
+      "name": "ansari"
+    }
+  ],
+  "goals": {
+    "u_1781192485123el1ir": {
+      "calories": 2000,
+      "protein": 150,
+      "carbs": 250,
+      "fat": 65,
+      "fiber": 30,
+      "water": 7
+    }
+  },
+  "profiles": {
+    "u_1781192485123el1ir": {
+      "weight": "59",
+      "height": "5.4",
+      "goalPreset": "maintain",
+      "age": "",
+      "goalWeight": "",
+      "dob": "2000-01-18",
+      "gender": "unspecified",
+      "stepGoal": 10000,
+      "languages": [
+        "English"
+      ]
+    }
+  },
+  "foodLogs": {
+    "u_1781192485123el1ir": {
+      "2026-06-12": [
+        {
+          "id": "1781269667169o8rr8",
+          "timestamp": "2026-06-12T13:07:47.169Z",
+          "name": "Apple",
+          "calories": 95,
+          "protein": 0.5,
+          "carbs": 25,
+          "fat": 0.3,
+          "fiber": 4.4,
+          "mealType": "lunch",
+          "source": "search",
+          "portion": 1
+        },
+        {
+          "id": "1781269670966qoylu",
+          "timestamp": "2026-06-12T13:07:50.966Z",
+          "name": "White Rice",
+          "calories": 206,
+          "protein": 4.3,
+          "carbs": 44.5,
+          "fat": 0.4,
+          "fiber": 0.6,
+          "mealType": "lunch",
+          "source": "search",
+          "portion": 1
+        },
+        {
+          "id": "1781271277340l695e",
+          "timestamp": "2026-06-12T13:34:37.340Z",
+          "name": "Apple",
+          "calories": 95,
+          "protein": 0.5,
+          "carbs": 25,
+          "fat": 0.3,
+          "fiber": 4.4,
+          "mealType": "lunch",
+          "source": "search",
+          "portion": 1
+        },
+        {
+          "id": "1781281348222ur4ef",
+          "timestamp": "2026-06-12T16:22:28.222Z",
+          "name": "Orange",
+          "calories": 62,
+          "protein": 1.2,
+          "carbs": 15.4,
+          "fat": 0.2,
+          "fiber": 3.1,
+          "mealType": "lunch",
+          "source": "search",
+          "portion": 1
+        }
+      ],
+      "2026-06-13": [
+        {
+          "id": "178132805300147kos",
+          "timestamp": "2026-06-13T05:20:53.001Z",
+          "name": "Apple",
+          "calories": 95,
+          "protein": 0.5,
+          "carbs": 25,
+          "fat": 0.3,
+          "fiber": 4.4,
+          "mealType": "lunch",
+          "source": "search",
+          "portion": 1
+        }
+      ]
+    }
+  },
+  "waterLogs": {
+    "u_1781192485123el1ir": {
+      "2026-06-11": 2
+    }
+  },
+  "burnedLogs": {
+    "u_1781192485123el1ir": {
+      "2026-06-12": 1229
+    }
+  },
+  "weightLogs": {
+    "u_1781192485123el1ir": [
+      {
+        "id": "wt_1781252947331gp2",
+        "date": "2026-06-12",
+        "weight": 59,
+        "timestamp": "2026-06-12T13:08:37.513Z"
+      }
+    ]
+  },
+  "zoroChatHistory": {
+    "u_1781192485123el1ir": [
+      {
+        "role": "model",
+        "text": "Greetings, **ansari**! I am **Zoro**, your autonomous AI Health Companion. ⚔️\n\nI can build **tailored diet plans**, design **personalized workout routines**, break down your **macros/micros**, and help you **snap & track calories** in real-time. \n\nI am fully connected to your tracker, so I can log activities, foods, and goals directly for you. Try asking me: *\"Create a diet plan for me\"* or click the clip button to upload a photo of your food!",
+        "timestamp": "2026-06-12T17:37:14.687Z"
+      },
+      {
+        "role": "user",
+        "text": "Generate a tailored meal plan for today",
+        "timestamp": "2026-06-12T17:37:16.660Z"
+      },
+      {
+        "role": "model",
+        "text": "⚔️ Sorry, I ran into a problem: Network error. Please check your internet connection.",
+        "timestamp": "2026-06-12T17:37:18.909Z"
+      }
+    ]
+  },
+  "zoroMemory": {
+    "u_1781192485123el1ir": []
+  }
+}

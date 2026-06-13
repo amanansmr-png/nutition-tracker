@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Consult Zoro, your autonomous AI health companion for diet plans, workouts, and insights.">
+  <title>Nutri Tracker — Zoro AI Coach</title>
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-content">
+      <div class="page-header flex justify-between items-center">
+        <div>
+          <h1>Zoro AI Coach</h1>
+          <p>Autonomous companion for diet, workout, & diagnostic logs</p>
+        </div>
+        <div id="zoroApiKeyStatus" style="font-size: 0.85rem;">
+          <!-- Key status check -->
+        </div>
+      </div>
+
+      <div class="zoro-grid">
+        <!-- Left Panel: Holographic Zoro Status Card -->
+        <div class="glass-card zoro-status-card">
+          <div class="zoro-avatar-container">
+            <div class="hologram-orb">🟢</div>
+            <div class="zoro-name-tag">
+              <h3>ZORO</h3>
+              <span>Autonomous Assistant</span>
+              <div>
+                <span class="status-pill-active">
+                  <span class="status-pulse-dot"></span>
+                  Ready to assist
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata info -->
+          <div class="zoro-meta-list">
+            <div class="zoro-meta-item">
+              <span>Reasoning Engine</span>
+              <span>Claude 3.5 Sonnet</span>
+            </div>
+            <div class="zoro-meta-item">
+              <span>Daily Calorie Target</span>
+              <span id="zoroCalGoal">2,000 kcal</span>
+            </div>
+            <div class="zoro-meta-item">
+              <span>Hydration Goal</span>
+              <span id="zoroWaterGoal">8 glasses</span>
+            </div>
+            <div class="zoro-meta-item">
+              <span>Current Weight</span>
+              <span id="zoroCurrentWeight">-- kg</span>
+            </div>
+          </div>
+
+          <!-- Zoro Memory Profile -->
+          <div class="zoro-memory-section">
+            <div class="zoro-memory-title">
+              <span>Memory Profile</span>
+              <span class="memory-count-badge" id="memoryCount">0 items</span>
+            </div>
+            <div class="zoro-memory-list" id="zoroMemoryList">
+              <div class="zoro-memory-empty">
+                Zoro hasn't stored any memories about you yet. Talk to him to build your health profile!
+              </div>
+            </div>
+          </div>
+          
+          <!-- Actions & Configuration -->
+          <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-secondary btn-sm btn-block" onclick="openSettingsModal()" style="border-color: rgba(168, 85, 247, 0.25);">
+              🔑 Configure API Key
+            </button>
+            <button class="btn btn-danger btn-sm btn-block" onclick="clearZoroHistory()" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--accent-red);">
+              🗑 Reset Chat History
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Panel: Conversation Canvas -->
+        <div class="glass-card zoro-chat-card">
+          <div class="zoro-chat-header">
+            <div class="zoro-chat-header-info">
+              <h2>Active Consultation Session</h2>
+              <p>Zoro tracks today's logs, suggests meals, and builds workouts.</p>
+            </div>
+            <div>
+              <span id="zoroSystemIndicator" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+                Systems online
+              </span>
+            </div>
+          </div>
+
+          <!-- Conversation Thread -->
+          <div class="zoro-chat-thread" id="zoroChatThread">
+            <!-- Dynamically populated messages -->
+          </div>
+
+          <!-- Typing Indicator -->
+          <div id="zoroTypingIndicator" class="typing-indicator" style="display: none;">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+
+          <!-- Chat Input -->
+          <div class="zoro-chat-input-area">
+            <!-- Image upload preview indicator -->
+            <div id="chatImagePreview" class="chat-image-preview-bar" style="display: none;">
+              <img id="previewImageThumb" class="preview-thumb" src="" alt="Food Preview">
+              <span id="previewImageName" class="preview-info">food.jpg</span>
+              <span class="preview-remove" onclick="removeAttachedImage()">✕</span>
+            </div>
+
+            <!-- Suggestion Quick Chips -->
+            <div class="suggestions-container">
+              <div class="suggestion-chip" onclick="sendQuickPrompt('Generate a tailored meal plan for today')">📋 Tailored Diet Plan</div>
+              <div class="suggestion-chip" onclick="sendQuickPrompt('Create a workout routine for me')">💪 Workout Program</div>
+              <div class="suggestion-chip" onclick="sendQuickPrompt('Analyze my nutrition breakdown for today')">📈 Daily breakdown</div>
+              <div class="suggestion-chip" onclick="sendQuickPrompt('What is my weight progress trend?')">⚖️ Weight report</div>
+              <div class="suggestion-chip" onclick="sendQuickPrompt('Remind me what you know about me')">🧠 What is in my memory?</div>
+            </div>
+
+            <div class="input-row">
+              <input type="file" id="chatImageAttach" accept="image/*" style="display:none;" onchange="handleImageAttachment(event)">
+              <button class="attach-btn" onclick="document.getElementById('chatImageAttach').click()" title="Attach Food Image for AI Tracking">
+                📎
+              </button>
+              
+              <input type="text" id="zoroChatInput" class="input-field" placeholder="Ask Zoro to plan a diet, create a workout, or log calories..." style="border-radius: var(--radius-md);" onkeydown="if(event.key === 'Enter') handleSendChat()">
+              
+              <button class="chat-send-btn" onclick="handleSendChat()" title="Send Message">
+                ➔
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Shared API Key Configuration Modal -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Claude API Key</h3>
+        <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="settings-section" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="input-group">
+          <label for="claudeKeyInput">Claude API Key</label>
+          <input type="password" id="claudeKeyInput" class="input-field" placeholder="sk-ant-...">
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">
+          Zoro runs on Anthropic Claude. Your key is stored safely in your browser local storage.
+        </p>
+        <div class="flex justify-between gap-12 mt-8">
+          <button class="btn btn-secondary btn-block" onclick="closeSettingsModal()">Cancel</button>
+          <button class="btn btn-primary btn-block" onclick="saveApiKey()">Save API Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/zoro.js"></script>
+</body>
+</html>

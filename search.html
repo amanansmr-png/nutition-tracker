@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nutri Tracker - Search for foods from our database and log them with custom portion sizes.">
+  <title>Nutri Tracker — Food Search</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Additional custom styling to layout search grid nicely */
+    .search-grid-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .food-search-results {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 1024px) {
+      .food-search-results {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Food Search</h1>
+        <p>Find foods and add them to your daily log</p>
+      </div>
+
+      <div class="search-grid-container">
+        <!-- Search Input -->
+        <div class="glass-card">
+          <div class="input-group">
+            <input type="text" id="foodSearchInput" class="input-field" placeholder="🔍 Search for foods (e.g. apple, chicken, roti...)" autofocus>
+          </div>
+        </div>
+
+        <!-- Categories & Count -->
+        <div class="flex flex-col gap-12">
+          <div id="categoryTabs" class="category-tabs">
+            <!-- Dynamically populated category buttons -->
+          </div>
+          <div id="resultCount" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+            0 foods found
+          </div>
+        </div>
+
+        <!-- Food List -->
+        <div id="foodList" class="food-search-results">
+          <!-- Dynamically populated search cards -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Food Modal -->
+  <div id="addFoodModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add to Daily Log</h3>
+        <button class="modal-close" onclick="closeAddFoodModal()">✕</button>
+      </div>
+      
+      <div class="flex items-center gap-16 mb-24" style="border-bottom: 1px solid var(--border-glass); padding-bottom: 20px;">
+        <div id="modalFoodEmoji" style="font-size: 2.5rem; background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: var(--radius-sm);">🍽️</div>
+        <div class="flex flex-col">
+          <h4 id="modalFoodName" style="font-size: 1.1rem; font-weight: 700;">Food Name</h4>
+          <p id="modalFoodServing" style="font-size: 0.8rem; color: var(--text-muted);">1 serving</p>
+          <p id="modalFoodMacros" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">P: 0g · C: 0g · F: 0g</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-16">
+        <div class="input-group">
+          <label for="portionMultiplier">Portion (Serving Multiplier)</label>
+          <div class="flex gap-12 items-center">
+            <input type="number" id="portionMultiplier" class="input-field" value="1" step="0.25" min="0.1" oninput="updatePortionPreview()" style="flex: 1;">
+            <span id="portionCalPreview" style="font-weight: 700; color: var(--accent-purple); font-size: 1.1rem; min-width: 80px; text-align: right;">0 kcal</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Meal Type</label>
+          <div class="meal-type-selector">
+            <button class="meal-type-option" data-meal="breakfast" onclick="selectMealType(this)">
+              <span class="meal-emoji">🌅</span> Breakfast
+            </button>
+            <button class="meal-type-option active" data-meal="lunch" onclick="selectMealType(this)">
+              <span class="meal-emoji">☀️</span> Lunch
+            </button>
+            <button class="meal-type-option" data-meal="dinner" onclick="selectMealType(this)">
+              <span class="meal-emoji">🌙</span> Dinner
+            </button>
+            <button class="meal-type-option" data-meal="snack" onclick="selectMealType(this)">
+              <span class="meal-emoji">🍿</span> Snack
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-between gap-12 mt-16">
+          <button class="btn btn-secondary btn-block" onclick="closeAddFoodModal()">Cancel</button>
+          <button class="btn btn-primary btn-block" onclick="confirmAddFood()">Add to Log</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>
